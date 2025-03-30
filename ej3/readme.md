@@ -1,6 +1,6 @@
 compilar:
 
-g++ -o programa main.cpp entero.cpp real.cpp complejo.cpp -std=c++11
+g++ -o programa main.cpp entero.h real.h complejo.h -std=c++11
 
 run:
 
