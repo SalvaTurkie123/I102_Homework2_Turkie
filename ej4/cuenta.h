@@ -22,11 +22,10 @@ class Cuenta {
 
         void depositar(double cantidad);
         virtual void retirar(double cantidad);
-        virtual void mostrarInfo() const = 0;
+        virtual void mostrarInfo() = 0;
 
         double getBalance() const;
         void setBalance(double nuevoBalance);
-
 
 };
 
