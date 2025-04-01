@@ -9,6 +9,7 @@ class CajaDeAhorro : public Cuenta {
     private:
 
         mutable int contadorMostrar;
+        
 
     public:
     

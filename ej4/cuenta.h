@@ -18,10 +18,10 @@ class Cuenta {
 
         // Por defecto
         Cuenta(const std::string& titular, double saldoInicial);
-        virtual ~Cuenta() {}
+        virtual ~Cuenta();
 
         void depositar(double cantidad);
-        virtual void retirar(double cantidad);
+        virtual void retirar(double cantidad) = 0;
         virtual void mostrarInfo() = 0;
 
         double getBalance() const;

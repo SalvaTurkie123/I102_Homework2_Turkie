@@ -2,10 +2,18 @@
 
 Cuenta::Cuenta(const std::string& titular, double saldoInicial) : titularCuenta(titular), balance(saldoInicial) {}
 
-void Cuenta::depositar(double cantidad) {
+Cuenta::~Cuenta() {}
 
+void Cuenta::depositar(double cantidad) {
+    
+    if (cantidad >= 0) {
         balance += cantidad;
-        std::cout << "Se depositaron " << cantidad << " en la cuenta de " << titularCuenta << ". El nuevo balance es " << balance << "." << std::endl;
+        std::cout << "Se depositaron $" << cantidad << " en la cuenta de " << titularCuenta << "." << std::endl;
+    }
+
+    else {
+        std::cout << "No se puede depositar una cantidad negativa." << std::endl;
+    }
 
 }
 
