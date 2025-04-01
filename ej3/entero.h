@@ -2,34 +2,20 @@
 #define ENTERO_H
 
 #include "numero.h"
-#include <iostream>
+#include <string>
 
 class Entero : public Numero {
+private:
+    int valor;
 
-    private:
-        int valor;
-
-    public:
-        Entero(int v) : valor(v) {}
-        
-        Numero* suma(const Numero& otro) const override {
-            const Entero* e = dynamic_cast<const Entero*>(&otro);
-            return new Entero(valor + e->valor);
-        }
-
-        Numero* resta(const Numero& otro) const override {
-            const Entero& e = dynamic_cast<const Entero&>(otro);
-            return new Entero(valor - e.valor);
-        }
+public:
+    Entero(int v);
     
-        Numero* multiplicacion(const Numero& otro) const override {
-            const Entero& e = dynamic_cast<const Entero&>(otro);
-            return new Entero(valor * e.valor);
-        }
+    Numero* suma(const Numero& otro) const override;
+    Numero* resta(const Numero& otro) const override;
+    Numero* multiplicacion(const Numero& otro) const override;
     
-        std::string toString() const override {
-            return std::to_string(valor);
-        }
+    std::string toString() const override;
 };
 
 #endif

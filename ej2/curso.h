@@ -9,26 +9,35 @@
 class Curso {
 
 private:
-    
+
+    std::string nombre;
     std::vector<Estudiante*> estudiantes;
-    const int maxEstudiantes = 20;
+    unsigned int maxEstudiantes = 4;
+    static std::vector<Curso*> cursosDisponibles; 
 
 public:
 
-    Curso();
-    Curso(const Curso& otro); // Constructor de copia
+
+
+    Curso(const std::string& nombre);
     ~Curso();
 
-    // i.
-    bool inscribirEstudiante(Estudiante* estudiante);
-    bool desinscribirEstudiante(int legajo);
+    // Constructor de copia (shallow copy)
+    Curso(const Curso& otro,  const std::string& nuevoNombre = "");
 
-    bool estaInscrito(int legajo) const; // ii.
+    // Operador de asignación (shallow copy)
+    Curso& operator=(const Curso& otro);
 
-    bool estaCompleto() const; // iii.
-
-    void imprimirEstudiantes() const; // iv.
+    void inscribirEstudiante(Estudiante* estudiante);
+    void asignarNotaAEstudiante(int legajo, float nota);
+    void desinscribirEstudiante(int legajo);
+    bool estaInscripto(int legajo) const;
+    bool estaCompleto() const;
+    void imprimirEstudiantes() const;
     
+
+    std::string getNombre() const { return nombre; }
+
     friend std::ostream& operator<<(std::ostream& os, const Curso& curso);
 
 };

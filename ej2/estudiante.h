@@ -18,16 +18,12 @@ public:
     // Constructor con nombre y legajo del estudiante, lo inicializa
     Estudiante(const std::string& nombre, int legajo);
 
-    // Agregar un curso con su nota
-    void agregarCurso(const std::string& curso, float nota);
+    void asignarNota(const std::string& curso, float nota);
+    void mostrarNotas() const;
+    void eliminarNota(const std::string& curso);
     
-    // Nombre del estudiante
     std::string getNombre() const;
-
-    // Legajo del estudiante
     int getLegajo() const;
-
-    // Promedio de las notas
     float getPromedio() const;
 
     // Sobrecarga de operadores 
