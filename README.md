@@ -1,5 +1,7 @@
 # I102_Homework2_Turkie
 
+Para compilar un ejercicio, debes entrar a la carpeta del ejercicio con el comando 'cd ej1' por ejemplo, luego ejecutar el comando 'make' y se compilará y ejecutará el ejercicio.
+
 2.c. ¿Qué tipo de relación existe entre los objetos curso y estudiante?
 
 
