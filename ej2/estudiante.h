@@ -3,32 +3,35 @@
 
 #include <string>
 #include <map>
+#include <iostream>
+
+using namespace std;
 
 class Estudiante {
 
 private:
 
-    std::string nombre;
+    string nombre;
     int legajo;
-    std::map<std::string, float> cursos; // curso -> Nota
+    map<string, float> cursos; // curso -> Nota
 
 
 public:
 
     // Constructor con nombre y legajo del estudiante, lo inicializa
-    Estudiante(const std::string& nombre, int legajo);
+    Estudiante(const string& nombre, int legajo);
 
-    void asignarNota(const std::string& curso, float nota);
+    void asignarNota(const string& curso, float nota);
     void mostrarNotas() const;
-    void eliminarNota(const std::string& curso);
+    void eliminarNota(const string& curso);
     
-    std::string getNombre() const;
+    string getNombre() const;
     int getLegajo() const;
     float getPromedio() const;
 
     // Sobrecarga de operadores 
     bool operator<(const Estudiante& otro) const; // Para ordenar por nombre
-    friend std::ostream& operator<<(std::ostream& os, const Estudiante& e); // Para imprimir información del estudiante.
+    friend ostream& operator<<(ostream& os, const Estudiante& e); // Para imprimir información del estudiante.
     
 };
 

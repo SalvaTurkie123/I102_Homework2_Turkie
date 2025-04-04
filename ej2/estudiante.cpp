@@ -2,6 +2,8 @@
 #include <iostream>
 #include <numeric>
 
+using namespace std;
+
 Estudiante::Estudiante(const std::string& nombre, int legajo) 
     : nombre(nombre), legajo(legajo) {}
 
@@ -25,25 +27,25 @@ float Estudiante::getPromedio() const {
 
 void Estudiante::mostrarNotas() const {
     if (cursos.empty()) {
-        std::cout << "El estudiante " << nombre << " no tiene notas registradas.\n";
+        cout << "El estudiante " << nombre << " no tiene notas registradas.\n";
         return;
     }
 
-    std::cout << "Notas de " << nombre << " (Legajo: " << legajo << "):\n";
+    cout << "Notas de " << nombre << " (Legajo: " << legajo << "):\n";
     for (const auto& [curso, nota] : cursos) {
-        std::cout << "- " << curso << ": " << nota << "\n";
+        cout << "- " << curso << ": " << nota << "\n";
     }
 
-    std::cout << "Promedio general: " << getPromedio() << "\n";
+    cout << "Promedio general: " << getPromedio() << "\n";
 }
 
 void Estudiante::eliminarNota(const std::string& curso) {
     auto it = cursos.find(curso);
     if (it != cursos.end()) {
         cursos.erase(it);
-        std::cout << "Nota del curso " << curso << " eliminada para el estudiante " << nombre << ".\n";
+        cout << "Nota del curso " << curso << " eliminada para el estudiante " << nombre << ".\n";
     } else {
-        std::cout << "El estudiante " << nombre << " no tiene nota registrada para el curso " << curso << ".\n";
+        cout << "El estudiante " << nombre << " no tiene nota registrada para el curso " << curso << ".\n";
     }
   }
 
@@ -62,4 +64,3 @@ std::ostream& operator<<(std::ostream& os, const Estudiante& e) {
     }
     return os;
 }
-

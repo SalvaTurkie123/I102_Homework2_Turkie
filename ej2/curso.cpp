@@ -1,10 +1,14 @@
 #include "curso.h"
+#include <iostream>
+#include <vector>
+#include <algorithm>
+using namespace std;
 
-std::vector<Curso*> Curso::cursosDisponibles;
+vector<Curso*> Curso::cursosDisponibles;
 
 // Constructores
 
-Curso::Curso(const std::string& nombre) : nombre(nombre) {}
+Curso::Curso(const string& nombre) : nombre(nombre) {}
 
 Curso::~Curso() {}
 
@@ -15,7 +19,7 @@ Curso::~Curso() {}
  (como modificar su nota o eliminarlo) se reflejará en todas las instancias de Curso que lo contengan.
  */
 // Constructor de copia con opción de renombrar
-Curso::Curso(const Curso& otro, const std::string& nuevoNombre)
+Curso::Curso(const Curso& otro, const string& nuevoNombre)
     : nombre(nuevoNombre.empty() ? otro.nombre : nuevoNombre), estudiantes(otro.estudiantes) {}
 // Operador de asignación (Shallow Copy)
 /*
@@ -38,29 +42,34 @@ void Curso::asignarNotaAEstudiante(int legajo, float nota) {
             return;
         }
     }
-    std::cout << "Estudiante con legajo " << legajo << " no encontrado en el curso " << nombre << ".\n";
+    cout << "Estudiante con legajo " << legajo << " no encontrado en el curso " << nombre << ".\n";
 }
 
 void Curso::inscribirEstudiante(Estudiante* estudiante) {
 
     if (estaInscripto(estudiante->getLegajo())) {
-        std::cout << "El estudiante ya está inscripto en el curso.\n";
+        cout << "El estudiante ya está inscripto en el curso.\n";
         return;
     }
 
     if (estaCompleto()) {
-        std::cout << "El curso está completo. No se puede inscribir más estudiantes.\n";
+        cout << "El curso está completo. No se puede inscribir más estudiantes.\n";
         return;
     }
 
     estudiantes.push_back(estudiante);
-    std::cout << "Estudiante " << estudiante->getNombre() << " inscrito en el curso " << nombre << ".\n";
-    std::cout << "------------------------\n";
+    cout << "Estudiante " << estudiante->getNombre() << " inscrito en el curso " << nombre << ".\n";
+    cout << "------------------------\n";
 
 }
 
 void Curso::desinscribirEstudiante(int legajo) {
-    auto it = std::remove_if(estudiantes.begin(), estudiantes.end(),
+    if (!estaInscripto(legajo)) {
+        cout << "Estudiante con legajo " << legajo << " no encontrado en el curso " << nombre << ".\n";
+        return;
+    }
+
+    auto it = remove_if(estudiantes.begin(), estudiantes.end(),
         [legajo, this](Estudiante* est) {
             if (est->getLegajo() == legajo) {
                 est->eliminarNota(nombre); // Elimina las notas del curso
@@ -69,12 +78,8 @@ void Curso::desinscribirEstudiante(int legajo) {
             return false;
         });
 
-    if (it != estudiantes.end()) {
-        estudiantes.erase(it, estudiantes.end());
-        std::cout << "Estudiante con legajo " << legajo << " desinscripto del curso " << nombre << ".\n";
-    } else {
-        std::cout << "Estudiante con legajo " << legajo << " no encontrado en el curso " << nombre << ".\n";
-    }
+    estudiantes.erase(it, estudiantes.end());
+    cout << "Estudiante con legajo " << legajo << " desinscripto del curso " << nombre << ".\n";
 }
 
 bool Curso::estaInscripto(int legajo) const {
@@ -85,16 +90,16 @@ bool Curso::estaInscripto(int legajo) const {
 }
 
 bool Curso::estaCompleto() const {
-    return estudiantes.size() >= 4;
+    return estudiantes.size() >= 20;
 }
 
 void Curso::imprimirEstudiantes() const {
     for (const auto& estudiante : estudiantes) {
-        std::cout << *estudiante << "\n";
+        cout << *estudiante << "\n";
     }
 }
 
-std::ostream& operator<<(std::ostream& os, const Curso& curso) {
+ostream& operator<<(ostream& os, const Curso& curso) {
     os << "Curso: " << curso.nombre;
     return os;
 }

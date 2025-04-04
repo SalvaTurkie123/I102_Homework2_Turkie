@@ -1,6 +1,7 @@
 #include "cuenta.h"
+using namespace std;
 
-Cuenta::Cuenta(const std::string& titular, double saldoInicial) : titularCuenta(titular), balance(saldoInicial) {}
+Cuenta::Cuenta(const string& titular, double saldoInicial) : titularCuenta(titular), balance(saldoInicial) {}
 
 Cuenta::~Cuenta() {}
 
@@ -8,11 +9,11 @@ void Cuenta::depositar(double cantidad) {
     
     if (cantidad >= 0) {
         balance += cantidad;
-        std::cout << "Se depositaron $" << cantidad << " en la cuenta de " << titularCuenta << "." << std::endl;
+        cout << "Se depositaron $" << cantidad << " en la cuenta de " << titularCuenta << "." << endl;
     }
 
     else {
-        std::cout << "No se puede depositar una cantidad negativa." << std::endl;
+        cout << "No se puede depositar una cantidad negativa." << endl;
     }
 
 }
