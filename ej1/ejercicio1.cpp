@@ -1,6 +1,7 @@
 #include <iostream>
 #include <iomanip>  // Para setw y setfill
 #include <string>   // Para manejar a.m./p.m.
+#include <limits>   // Para numeric_limits
 
 using namespace std;
 
@@ -9,7 +10,7 @@ class Time {
 private:
 
     int hour, minute, second;
-    bool isPM; // true si es PM, false si es AM
+    bool isPM;
 
 
 public: 
@@ -90,77 +91,176 @@ void showMenu() {
     cout << "0. Salir\n";
     cout << "Seleccione una opción: ";
 }
-
 int main() {
-
     Time reloj; // Inicializa el reloj con 0h, 0m, 0s a.m.
     int opcion, h, m, s;
     string am_pm;
 
     while (true) {
-
         showMenu();
-        cin >> opcion;
-        cin.ignore(); 
+
+        // Validar que la opción ingresada sea un número válido entre 0 y 12
+        while (true) {
+            cin >> opcion;
+
+            if (cin.fail() || opcion < 0 || opcion > 12) {
+                cin.clear(); 
+                cin.ignore(numeric_limits<streamsize>::max(), '\n'); 
+                cout << "Opción inválida. Debe ser un número entre 0 y 12. Intente de nuevo.\n";
+            } else {
+                break;
+            }
+        }
 
         switch (opcion) {
-        
             case 1:
                 reloj = Time();
                 cout << "Reloj inicializado a 0h, 0m, 0s a.m." << endl;
                 break;
 
             case 2:
-                cout << "Ingrese la hora (0-12): ";
-                cin >> h;
+                do {
+                    cout << "Ingrese la hora (0-12): ";
+                    cin >> h;
+                    if (cin.fail() || h < 0 || h > 12) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Hora inválida. Debe ser un número entre 0 y 12. Intente de nuevo.\n";
+                    }
+                } while (h < 0 || h > 12);
                 reloj = Time(h);
                 break;
 
             case 3:
-                cout << "Ingrese la hora (0-12): ";
-                cin >> h;  
-                cout << "Ingrese los minutos (0-59): ";
-                cin >> m;
+                do {
+                    cout << "Ingrese la hora (0-12): ";
+                    cin >> h;
+                    if (cin.fail() || h < 0 || h > 12) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Hora inválida. Debe ser un número entre 0 y 12. Intente de nuevo.\n";
+                    }
+                } while (h < 0 || h > 12);
+
+                do {
+                    cout << "Ingrese los minutos (0-59): ";
+                    cin >> m;
+                    if (cin.fail() || m < 0 || m >= 60) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Minutos inválidos. Deben ser un número entre 0 y 59. Intente de nuevo.\n";
+                    }
+                } while (m < 0 || m >= 60);
+
                 reloj = Time(h, m);
                 break;
 
             case 4:
-                cout << "Ingrese la hora (0-12): ";
-                cin >> h;
-                cout << "Ingrese los minutos (0-59): ";
-                cin >> m;
-                cout << "Ingrese los segundos (0-59): ";
-                cin >> s;
+                do {
+                    cout << "Ingrese la hora (0-12): ";
+                    cin >> h;
+                    if (cin.fail() || h < 0 || h > 12) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Hora inválida. Debe ser un número entre 0 y 12. Intente de nuevo.\n";
+                    }
+                } while (h < 0 || h > 12);
+
+                do {
+                    cout << "Ingrese los minutos (0-59): ";
+                    cin >> m;
+                    if (cin.fail() || m < 0 || m >= 60) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Minutos inválidos. Deben ser un número entre 0 y 59. Intente de nuevo.\n";
+                    }
+                } while (m < 0 || m >= 60);
+
+                do {
+                    cout << "Ingrese los segundos (0-59): ";
+                    cin >> s;
+                    if (cin.fail() || s < 0 || s >= 60) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Segundos inválidos. Deben ser un número entre 0 y 59. Intente de nuevo.\n";
+                    }
+                } while (s < 0 || s >= 60);
+
                 reloj = Time(h, m, s);
                 break;
 
             case 5:
-                cout << "Ingrese la hora (0-12): ";
-                cin >> h;
-                cout << "Ingrese los minutos (0-59): ";
-                cin >> m;
-                cout << "Ingrese los segundos (0-59): ";
-                cin >> s;
+                do {
+                    cout << "Ingrese la hora (0-12): ";
+                    cin >> h;
+                    if (cin.fail() || h < 0 || h > 12) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Hora inválida. Debe ser un número entre 0 y 12. Intente de nuevo.\n";
+                    }
+                } while (h < 0 || h > 12);
+
+                do {
+                    cout << "Ingrese los minutos (0-59): ";
+                    cin >> m;
+                    if (cin.fail() || m < 0 || m >= 60) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Minutos inválidos. Deben ser un número entre 0 y 59. Intente de nuevo.\n";
+                    }
+                } while (m < 0 || m >= 60);
+
+                do {
+                    cout << "Ingrese los segundos (0-59): ";
+                    cin >> s;
+                    if (cin.fail() || s < 0 || s >= 60) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Segundos inválidos. Deben ser un número entre 0 y 59. Intente de nuevo.\n";
+                    }
+                } while (s < 0 || s >= 60);
+
                 cout << "Ingrese a.m./p.m.: ";
                 cin >> am_pm;
                 reloj = Time(h, m, s, am_pm);
                 break;
 
             case 6:
-                cout << "Ingrese la nueva hora (0-12): ";
-                cin >> h;
+                do {
+                    cout << "Ingrese la nueva hora (0-12): ";
+                    cin >> h;
+                    if (cin.fail() || h < 0 || h > 12) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Hora inválida. Debe ser un número entre 0 y 12. Intente de nuevo.\n";
+                    }
+                } while (h < 0 || h > 12);
                 reloj.setHour(h);
                 break;
 
             case 7:
-                cout << "Ingrese los nuevos minutos (0-59): ";
-                cin >> m;
+                do {
+                    cout << "Ingrese los nuevos minutos (0-59): ";
+                    cin >> m;
+                    if (cin.fail() || m < 0 || m >= 60) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Minutos inválidos. Deben ser un número entre 0 y 59. Intente de nuevo.\n";
+                    }
+                } while (m < 0 || m >= 60);
                 reloj.setMinute(m);
                 break;
 
             case 8:
-                cout << "Ingrese los nuevos segundos (0-59): ";
-                cin >> s;
+                do {
+                    cout << "Ingrese los nuevos segundos (0-59): ";
+                    cin >> s;
+                    if (cin.fail() || s < 0 || s >= 60) {
+                        cin.clear();
+                        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+                        cout << "Segundos inválidos. Deben ser un número entre 0 y 59. Intente de nuevo.\n";
+                    }
+                } while (s < 0 || s >= 60);
                 reloj.setSecond(s);
                 break;
 
