@@ -5,6 +5,10 @@
 
 class CajaDeAhorro : public Cuenta {
 
+    /*
+    contadorMostrar: private porque es un detalle interno de la clase y no debe ser accesible desde fuera.
+    Métodos públicos: Los métodos como retirar y mostrarInfo son public porque deben ser accesibles desde cualquier parte del programa.
+    */
 
     private:
 

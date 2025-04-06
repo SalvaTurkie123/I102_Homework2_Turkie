@@ -6,17 +6,22 @@
 
 class Cuenta {
 
+    /*
+    balance: private para evitar accesos no controlados y garantizar que solo se modifique mediante métodos específicos.
+    titularCuenta: protected para que las clases derivadas puedan acceder al titular sin exponerlo directamente.
+    Métodos públicos: Los métodos como depositar, retirar, y mostrarInfo son public porque deben ser accesibles desde cualquier parte del programa.
+    */
+
     private:
 
-        double balance;
+        double balance; 
 
     protected:
 
-        std::string titularCuenta;
+        std::string titularCuenta; 
 
     public:
 
-        // Por defecto
         Cuenta(const std::string& titular, double saldoInicial);
         virtual ~Cuenta();
 
