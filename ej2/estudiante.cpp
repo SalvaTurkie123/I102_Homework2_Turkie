@@ -4,12 +4,13 @@
 
 using namespace std;
 
-Estudiante::Estudiante(const std::string& nombre, int legajo) 
+Estudiante::Estudiante(const string& nombre, int legajo) 
     : nombre(nombre), legajo(legajo) {}
 
-std::string Estudiante::getNombre() const {
+string Estudiante::getNombre() const {
     return nombre;
 }
+
 int Estudiante::getLegajo() const {
     return legajo;
 }
@@ -53,11 +54,13 @@ void Estudiante::asignarNota(const std::string& curso, float nota) {
     cursos[curso] = nota;
 }
 
+// Sobrecarga del operador "<" para ordenar estudiantes por nombre
 bool Estudiante::operator<(const Estudiante& otro) const {
-    return nombre < otro.nombre; // Ordenar por nombre
+    return nombre < otro.nombre;
 }
 
-std::ostream& operator<<(std::ostream& os, const Estudiante& e) {
+// Sobrecarga del operador "<<" para imprimir información del estudiante
+ostream& operator<<(ostream& os, const Estudiante& e) {
     os << "Nombre: " << e.nombre << ", Legajo: " << e.legajo << ", Promedio: " << e.getPromedio() << "\nCursos:\n";
     for (const auto& par : e.cursos) {
         os << "  " << par.first << ": " << par.second << "\n";

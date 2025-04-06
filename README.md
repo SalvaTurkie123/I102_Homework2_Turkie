@@ -4,7 +4,5 @@ Para compilar un ejercicio, debes entrar a la carpeta del ejercicio con el coman
 
 2.c. ¿Qué tipo de relación existe entre los objetos curso y estudiante?
 
+La relación entre los objetos Curso y Estudiante es una relación de agregación. Esto significa que un objeto de la clase Curso contiene referencias (en este caso, punteros) a objetos de la clase Estudiante, pero los estudiantes pueden existir independientemente de los cursos. Esta relación permite que los cursos gestionen a sus estudiantes sin asumir la propiedad de ellos.
 
-La relación entre los objetos Curso y Estudiante es una relación de agregación, específicamente una agregación con punteros inteligentes (std::shared_ptr).
-
-La agregación se da cuando un objeto (en este caso, Curso) contiene referencias o punteros a otros objetos (Estudiante), pero estos objetos pueden existir independientemente del primero. Es decir, un estudiante puede existir fuera de un curso y también puede estar en varios cursos sin que su existencia dependa de ellos.

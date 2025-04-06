@@ -2,51 +2,39 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <memory> 
 using namespace std;
 
 vector<Curso*> Curso::cursosDisponibles;
-
-// Constructores
 
 Curso::Curso(const string& nombre) : nombre(nombre) {}
 
 Curso::~Curso() {}
 
-// Constructor de copia (Shallow Copy)
+// Constructor de copia
 /*
- Dado que varios cursos pueden compartir estudiantes, este constructor copia los punteros a los estudiantes,
- en lugar de duplicar los objetos de estudiante. Esto significa que cualquier cambio en los estudiantes
- (como modificar su nota o eliminarlo) se reflejará en todas las instancias de Curso que lo contengan.
- */
-// Constructor de copia con opción de renombrar
+Cuando se copia un objeto de la clase Curso, el constructor de copia realiza una copia superficial (shallow copy). Esto significa que:
+
+El nombre del curso Se copia directamente como un nuevo std::string, lo que implica que el nuevo curso tiene su propio nombre independiente.
+El vector de estudiantes (estudiantes): Se copia el vector de std::shared_ptr<Estudiante>. Esto no crea duplicados de los objetos Estudiante, sino que incrementa el contador de referencias de los shared_ptr que apuntan a los mismos objetos Estudiante.
+Como resultado, tanto el curso original como el curso copiado comparten los mismos objetos Estudiante. 
+
+El uso de std::shared_ptr en el vector estudiantes implica que los objetos Estudiante son compartidos entre los cursos. Esto es útil en escenarios donde varios cursos necesitan acceder a los mismos estudiantes sin duplicar los datos.
+
+*/
+
 Curso::Curso(const Curso& otro, const string& nuevoNombre)
     : nombre(nuevoNombre.empty() ? otro.nombre : nuevoNombre), estudiantes(otro.estudiantes) {}
-// Operador de asignación (Shallow Copy)
-/*
- Similar al constructor de copia, este operador copia la lista de punteros a estudiantes.
- Se asegura de que el curso de destino tenga los mismos estudiantes que el curso de origen.
- */
+
 Curso& Curso::operator=(const Curso& otro) {
-    if (this != &otro) {  // Evita autoasignación
+    if (this != &otro) {
         nombre = otro.nombre;
         estudiantes = otro.estudiantes;
     }
     return *this;
 }
 
-// Métodos
-void Curso::asignarNotaAEstudiante(int legajo, float nota) {
-    for (auto* estudiante : estudiantes) {
-        if (estudiante->getLegajo() == legajo) {
-            estudiante->asignarNota(nombre, nota);
-            return;
-        }
-    }
-    cout << "Estudiante con legajo " << legajo << " no encontrado en el curso " << nombre << ".\n";
-}
-
-void Curso::inscribirEstudiante(Estudiante* estudiante) {
-
+void Curso::inscribirEstudiante(shared_ptr<Estudiante> estudiante) {
     if (estaInscripto(estudiante->getLegajo())) {
         cout << "El estudiante ya está inscripto en el curso.\n";
         return;
@@ -58,21 +46,25 @@ void Curso::inscribirEstudiante(Estudiante* estudiante) {
     }
 
     estudiantes.push_back(estudiante);
-    cout << "Estudiante " << estudiante->getNombre() << " inscrito en el curso " << nombre << ".\n";
-    cout << "------------------------\n";
+    cout << "Estudiante inscrito en el curso " << nombre << ".\n";
+}
 
+void Curso::asignarNotaAEstudiante(int legajo, float nota) {
+    for (const auto& estudiante : estudiantes) {
+        if (estudiante->getLegajo() == legajo) {
+            estudiante->asignarNota(nombre, nota);
+            cout << "Nota " << nota << " asignada a " << estudiante->getNombre() << " en el curso " << nombre << ".\n";
+            return;
+        }
+    }
+    cout << "Estudiante con legajo " << legajo << " no encontrado en el curso " << nombre << ".\n";
 }
 
 void Curso::desinscribirEstudiante(int legajo) {
-    if (!estaInscripto(legajo)) {
-        cout << "Estudiante con legajo " << legajo << " no encontrado en el curso " << nombre << ".\n";
-        return;
-    }
-
     auto it = remove_if(estudiantes.begin(), estudiantes.end(),
-        [legajo, this](Estudiante* est) {
+        [legajo, this](const shared_ptr<Estudiante>& est) {
             if (est->getLegajo() == legajo) {
-                est->eliminarNota(nombre); // Elimina las notas del curso
+                est->eliminarNota(nombre);
                 return true;
             }
             return false;
@@ -90,16 +82,33 @@ bool Curso::estaInscripto(int legajo) const {
 }
 
 bool Curso::estaCompleto() const {
-    return estudiantes.size() >= 20;
+    return estudiantes.size() >= maxEstudiantes;
 }
 
 void Curso::imprimirEstudiantes() const {
-    for (const auto& estudiante : estudiantes) {
+    // Crear una copia del vector de estudiantes para ordenarlo
+    vector<shared_ptr<Estudiante>> estudiantesOrdenados = estudiantes;
+
+    // Ordenar los estudiantes por nombre
+    sort(estudiantesOrdenados.begin(), estudiantesOrdenados.end(),
+         [](const shared_ptr<Estudiante>& a, const shared_ptr<Estudiante>& b) {
+             return *a < *b; // Usa la sobrecarga del operador "<" de Estudiante
+         });
+
+    // Imprimir los estudiantes ordenados
+    for (const auto& estudiante : estudiantesOrdenados) {
         cout << *estudiante << "\n";
     }
 }
 
+string Curso::getNombre() const {
+    return nombre;
+}
+
 ostream& operator<<(ostream& os, const Curso& curso) {
-    os << "Curso: " << curso.nombre;
+    os << "Curso: " << curso.nombre << "\nEstudiantes:\n";
+    for (const auto& estudiante : curso.estudiantes) {
+        os << *estudiante << "\n";
+    }
     return os;
 }

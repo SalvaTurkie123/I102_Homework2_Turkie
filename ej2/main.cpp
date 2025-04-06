@@ -1,7 +1,9 @@
 #include <iostream>
 #include <limits>
+#include <memory>
 #include "curso.h"
 #include "estudiante.h"
+#include "mainutils.cpp"
 
 using namespace std;
 
@@ -19,64 +21,15 @@ void mostrarMenu() {
     cout << "Seleccione una opción: ";
 }
 
-// Función auxiliar para seleccionar un curso
-Curso* seleccionarCurso(vector<Curso>& cursos) {
-    if (cursos.empty()) {
-        cout << "No hay cursos disponibles.\n";
-        return nullptr;
-    }
-
-    cout << "Seleccione un curso:\n";
-    for (size_t i = 0; i < cursos.size(); ++i) {
-        cout << i + 1 << ". " << cursos[i].getNombre() << "\n";
-    }
-    cout << "Opción: ";
-    int indexCurso;
-    cin >> indexCurso;
-
-    if (indexCurso < 1 || indexCurso > static_cast<int>(cursos.size())) {
-        cout << "Opción inválida.\n";
-        return nullptr;
-    }
-
-    return &cursos[indexCurso - 1];
-}
-
-// Función auxiliar para buscar o crear un estudiante
-Estudiante* obtenerEstudiante(vector<Estudiante*>& estudiantes) {
-    string nombreEst;
-    int legajo;
-
-    cout << "Ingrese el nombre del estudiante: ";
-    cin.ignore();
-    getline(cin, nombreEst);
-
-    cout << "Ingrese el legajo del estudiante: ";
-    cin >> legajo;
-
-    // Buscar si el estudiante ya existe
-    for (auto* est : estudiantes) {
-        if (est->getLegajo() == legajo) {
-            return est;
-        }
-    }
-
-    // Si no existe, lo creamos
-    auto* nuevoEstudiante = new Estudiante(nombreEst, legajo);
-    estudiantes.push_back(nuevoEstudiante);
-    return nuevoEstudiante;
-}
-
 int main() {
     vector<Curso> cursos;
-    vector<Estudiante*> estudiantes;
+    vector<shared_ptr<Estudiante>> estudiantes;
 
     int opcion;
     do {
         mostrarMenu();
         cin >> opcion;
 
-        // Validación de entrada
         if (cin.fail()) {
             cin.clear();
             cin.ignore(numeric_limits<streamsize>::max(), '\n');
@@ -90,6 +43,12 @@ int main() {
                 cout << "Ingrese el nombre del curso: ";
                 cin.ignore();
                 getline(cin, nombreCurso);
+
+                while (!std::all_of(nombreCurso.begin(), nombreCurso.end(), [](char c) { return isalpha(c) || isspace(c); })) {
+                    cout << "Nombre inválido. Solo se permiten letras y espacios. Intente de nuevo: ";
+                    getline(cin, nombreCurso);
+                }
+                 
                 cursos.emplace_back(nombreCurso);
                 cout << "Curso \"" << nombreCurso << "\" agregado correctamente.\n";
                 break;
@@ -99,10 +58,10 @@ int main() {
                 Curso* curso = seleccionarCurso(cursos);
                 if (!curso) break;
 
-                Estudiante* estudiante = obtenerEstudiante(estudiantes);
-                curso->inscribirEstudiante(estudiante);
-
-                if (!curso->estaCompleto()) cout << "Estudiante " << estudiante->getNombre() << " inscripto en " << curso->getNombre() << ".\n";
+                auto estudiante = obtenerEstudiante(estudiantes);
+                if (estudiante) {
+                    curso->inscribirEstudiante(estudiante);
+                }
                 break;
             }
 
@@ -172,7 +131,7 @@ int main() {
                     break;
                 }
 
-                cin.ignore();  // Limpiar buffer antes de getline
+                cin.ignore();
                 cout << "Ingrese el nuevo nombre del curso (o deje en blanco para mantener el original): ";
                 string nuevoNombre;
                 getline(cin, nuevoNombre);
@@ -189,7 +148,7 @@ int main() {
                     cout << "No hay cursos disponibles.\n";
                     break;
                 }
-
+            
                 int indexCurso;
                 cout << "Seleccione un curso:\n";
                 for (size_t i = 0; i < cursos.size(); ++i) {
@@ -197,20 +156,29 @@ int main() {
                 }
                 cout << "Opción: ";
                 cin >> indexCurso;
-
+            
                 if (indexCurso < 1 || indexCurso > static_cast<int>(cursos.size())) {
                     cout << "Opción inválida.\n";
                     break;
                 }
-
+            
                 int legajo;
                 float nota;
                 cout << "Ingrese el legajo del estudiante: ";
                 cin >> legajo;
-                cout << "Ingrese la nota: ";
-                cin >> nota;
-
+            
+                // Validar que la nota esté entre 0 y 10
+                do {
+                    cout << "Ingrese la nota (0-10): ";
+                    cin >> nota;
+            
+                    if (nota < 0 || nota > 10) {
+                        cout << "Nota inválida. Debe estar entre 0 y 10.\n";
+                    }
+                } while (nota < 0 || nota > 10);
+            
                 cursos[indexCurso - 1].asignarNotaAEstudiante(legajo, nota);
+            
                 break;
             }
 
@@ -225,7 +193,7 @@ int main() {
                 cin >> legajo;
 
                 bool encontrado = false;
-                for (auto* estudiante : estudiantes) {
+                for (const auto& estudiante : estudiantes) {
                     if (estudiante->getLegajo() == legajo) {
                         estudiante->mostrarNotas();
                         encontrado = true;
@@ -249,11 +217,6 @@ int main() {
         }
 
     } while (opcion != 8);
-
-    // Liberar memoria de los estudiantes
-    for (auto* est : estudiantes) {
-        delete est;
-    }
 
     return 0;
 }

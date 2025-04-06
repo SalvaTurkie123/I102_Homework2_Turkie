@@ -5,40 +5,41 @@
 #include <vector>
 #include <algorithm>
 #include <iostream>
+#include <memory>
 
 using namespace std;
 
 class Curso {
 
 private:
-
     string nombre;
-    vector<Estudiante*> estudiantes;
+    vector<shared_ptr<Estudiante>> estudiantes;
     unsigned int maxEstudiantes = 20;
-    static vector<Curso*> cursosDisponibles; 
+    static vector<Curso*> cursosDisponibles;
 
 public:
+
 
     Curso(const string& nombre);
     ~Curso();
 
-    // Constructor de copia (shallow copy)
+    // Constructor de copia
     Curso(const Curso& otro, const string& nuevoNombre = "");
-
-    // Operador de asignación (shallow copy)
     Curso& operator=(const Curso& otro);
 
-    void inscribirEstudiante(Estudiante* estudiante);
-    void asignarNotaAEstudiante(int legajo, float nota);
+    void inscribirEstudiante(shared_ptr<Estudiante> estudiante);
     void desinscribirEstudiante(int legajo);
     bool estaInscripto(int legajo) const;
     bool estaCompleto() const;
     void imprimirEstudiantes() const;
 
-    string getNombre() const { return nombre; }
+    void asignarNotaAEstudiante(int legajo, float nota);
+    
+    // Métodos para acceder a los miembros privados
+    string getNombre() const; 
+    const vector<shared_ptr<Estudiante>>& getEstudiantes() const;
 
-    friend ostream& operator<<(ostream& os, const Curso& curso);
-
+    friend ostream& operator<<(ostream& os, const Curso& curso); // Para imprimir información del curso
 };
 
 #endif

@@ -10,29 +10,24 @@ using namespace std;
 class Estudiante {
 
 private:
-
     string nombre;
     int legajo;
-    map<string, float> cursos; // curso -> Nota
-
+    map<string, float> cursos; 
 
 public:
-
-    // Constructor con nombre y legajo del estudiante, lo inicializa
     Estudiante(const string& nombre, int legajo);
 
     void asignarNota(const string& curso, float nota);
     void mostrarNotas() const;
     void eliminarNota(const string& curso);
-    
+
     string getNombre() const;
     int getLegajo() const;
     float getPromedio() const;
 
-    // Sobrecarga de operadores 
+    // Sobrecarga de operadores
     bool operator<(const Estudiante& otro) const; // Para ordenar por nombre
     friend ostream& operator<<(ostream& os, const Estudiante& e); // Para imprimir información del estudiante.
-    
 };
 
 #endif
